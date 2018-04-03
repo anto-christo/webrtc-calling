@@ -1,25 +1,60 @@
 <!DOCTYPE html>
 <head>
-    <title>WebRTC Audio Demo</title>
+    <title>WebRTC Call</title>
     <style>
-        video {
-            width: 320px;
-            height: 240px;
+        #remoteVideo {
+            width: 500px;
+            height: 500px;
+        }
+        #remote{
+            margin: 2%;
+            height: 500px;
+            width: 500px;
+            border: 10px solid white;
+            background-color: black;
+        }
+        #localVideo {
+            width: 100px;
+            height: 100px;
+        }
+        #local{
+            margin: 2%;
+            height: 100px;
+            width: 100px;
+            background-color: black;
+            float: left;
         }
         body {
             text-align: center;
+            background-color: #0099cc;
+            margin: 0px;
+        }
+        #header{
+            width:100%;
+            height:50px;
+            background-color:black;
+            padding:2%;
+            color:white;
+            font-size:30px;
+            font-family:'Times New Roman', Times, serif"
         }
     </style>
 </head>
 <body>
 
-    <!-- <div id="selectRoom">
-        <button id="goBoth">Video and Audio</button>
-        <button id="goVideoOnly">Video only</button>
-    </div> -->
+    <div id="header"><b>WebRTC Call</b></div>
 
-    <video id="localVideo" autoplay></video>
-    <video id="remoteVideo" autoplay></video>
+    <center>
+        <div id="local">
+            <video id="localVideo" autoplay></video>
+        </div>
+    </center>
+
+    <center>
+        <div id="remote">
+            <video id="remoteVideo" autoplay></video>
+        </div>
+    </center>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="client.js"></script>
