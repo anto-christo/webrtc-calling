@@ -1,12 +1,7 @@
 // getting dom elements
-var divSelectRoom = document.getElementById("selectRoom");
-var divConferenceRoom = document.getElementById("conferenceRoom");
-var btnGoBoth = document.getElementById("goBoth");
-var btnGoVideoOnly = document.getElementById("goVideoOnly");
 var localVideo = document.getElementById("localVideo");
 var remoteVideo = document.getElementById("remoteVideo");
-var btnMute = document.getElementById("mute");
-var listAudioEvents = document.getElementById("audioEvents");
+
 
 // variables
 var roomNumber = 'webrtc-audio-demo';
@@ -26,20 +21,16 @@ var streamConstraints;
 var isCaller;
 
 // Let's do this
+
 var socket = io();
 
-btnGoBoth.onclick = () => initiateCall(true);
-btnGoVideoOnly.onclick = () => initiateCall(false);
-// btnMute.onclick = toggleAudio;
-
-function initiateCall(audio) {
+initiateCall();
+function initiateCall() {
     streamConstraints = {
         video: true,
-        audio: audio
+        audio: true
     }
     socket.emit('create or join', roomNumber);
-    divSelectRoom.style = "display: none;";
-    divConferenceRoom.style = "display: block;";
 }
 
 // message handlers
@@ -95,10 +86,6 @@ socket.on('answer', function (event) {
     rtcPeerConnection.setRemoteDescription(new RTCSessionDescription(event));
 })
 
-// socket.on('toggleAudio', function (event) {
-//     addAudioEvent(event);
-// });
-
 // handler functions
 function onIceCandidate(event) {
     if (event.candidate) {
@@ -145,10 +132,6 @@ function setLocalAndAnswer(sessionDescription) {
 function addLocalStream(stream) {
     localStream = stream;
     localVideo.src = URL.createObjectURL(stream);
-
-    // if (stream.getAudioTracks().length > 0) {
-    //     btnMute.style = "display: block";
-    // }
 }
 
 function createPeerConnection() {
@@ -160,15 +143,4 @@ function createPeerConnection() {
 
 function toggleAudio() {
     localStream.getAudioTracks()[0].enabled = !localStream.getAudioTracks()[0].enabled
-    // socket.emit('toggleAudio', {
-    //     type: 'toggleAudio',
-    //     room: roomNumber,
-    //     message: localStream.getAudioTracks()[0].enabled ? "Remote user's audio is unmuted" : "Remote user's audio is muted"
-    // });
 }
-
-// function addAudioEvent(event) {
-//     var p = document.createElement("p");
-//     p.appendChild(document.createTextNode(event));
-//     listAudioEvents.appendChild(p);
-// }
