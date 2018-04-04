@@ -3,5 +3,5 @@
 2. In the root of project, run `node server.js`
 3. Go to your preferred browser and type `http://localhost:3000` in the address bar.
 
-# Credit
+# Reference
 https://github.com/agilityfeat/webrtc-audio-demo
