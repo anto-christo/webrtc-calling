@@ -40,6 +40,69 @@
             font-size:40px;
             font-family:'Times New Roman', Times, serif"
         }
+         /* The switch - the box around the slider */
+        .switch {
+        position: relative;
+        display: inline-block;
+        width: 30px;
+        height: 17px;
+        }
+
+        /* Hide default HTML checkbox */
+        .switch input {display:none;}
+
+        /* The slider */
+        .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+        }
+
+        .slider:before {
+        position: absolute;
+        content: "";
+        height: 13px;
+        width: 13px;
+        left: 2px;
+        bottom: 2px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+        }
+
+        input:checked + .slider {
+        background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+        -webkit-transform: translateX(13px);
+        -ms-transform: translateX(13px);
+        transform: translateX(13px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+        border-radius: 34px;
+        }
+
+        .slider.round:before {
+        border-radius: 50%;
+        }
+        .label{
+            color: white;
+            margin-right:30%;
+            font-size: 20px;
+        }
     </style>
 </head>
 <body>
@@ -50,10 +113,23 @@
         <video id="localVideo" autoplay muted></video>
     </div>
 
-    <div id="panel" style="float:right;background-color:black;margin-top:15%">
-        <img id="audio" style="display:block" src="img/audio.png" height="50px" width="50px"><br><br>
-        <img id="video" style="display:block" src="img/video.png" height="50px" width="50px"><br><br>
-        <img id="full" style="display:block" src="img/full.png" height="50px" width="50px">
+    <div id="panel" style="float:right;background-color:black;margin-top:10%;width:120px;height:230px;padding:1%">
+        <center><h3 style="color:white">Control Panel</h3></center><hr>
+        <label class="label">Audio</label>
+        <label class="switch">
+            <input id="audio" type="checkbox" checked>
+            <span class="slider round"></span>
+        </label><br><br>
+
+        <label class="label">Video</label>
+        <label class="switch">
+            <input id="video" type="checkbox" checked>
+            <span class="slider round"></span>
+        </label><br><br>
+
+        <center>
+            <img id="full" src="img/full.png" height="50px" width="50px">
+        </center>
     </div>
 
     <center>

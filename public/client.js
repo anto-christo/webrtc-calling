@@ -1,4 +1,3 @@
-// getting dom elements
 var localVideo = document.getElementById("localVideo");
 var remoteVideo = document.getElementById("remoteVideo");
 var audio = document.getElementById("audio");
@@ -6,7 +5,6 @@ var video = document.getElementById("video");
 var full = document.getElementById("full");
 
 
-// variables
 var roomNumber = 'webrtc-audio-demo';
 var localStream;
 var remoteStream;
@@ -22,8 +20,6 @@ var iceServers = {
 }
 var streamConstraints;
 var isCaller;
-
-// Let's do this
 
 var socket = io();
 
@@ -47,7 +43,6 @@ function initiateCall() {
     socket.emit('create or join', roomNumber);
 }
 
-// message handlers
 socket.on('created', function (room) {
     navigator.mediaDevices.getUserMedia(streamConstraints).then(function (stream) {
         addLocalStream(stream);
@@ -100,7 +95,6 @@ socket.on('answer', function (event) {
     rtcPeerConnection.setRemoteDescription(new RTCSessionDescription(event));
 })
 
-// handler functions
 function onIceCandidate(event) {
     if (event.candidate) {
         console.log('sending ice candidate');
@@ -118,9 +112,7 @@ function onAddStream(event) {
     remoteVideo.src = URL.createObjectURL(event.stream);
     remoteStream = event.stream;
     if (remoteStream.getAudioTracks().length > 0) {
-        //addAudioEvent('Remote user is sending Audio');
     } else {
-        //addAudioEvent('Remote user is not sending Audio');
     }
 }
 
@@ -142,7 +134,6 @@ function setLocalAndAnswer(sessionDescription) {
     });
 }
 
-//utility functions
 function addLocalStream(stream) {
     localStream = stream;
     localVideo.src = URL.createObjectURL(stream);
