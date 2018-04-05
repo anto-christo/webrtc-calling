@@ -3,6 +3,7 @@ var localVideo = document.getElementById("localVideo");
 var remoteVideo = document.getElementById("remoteVideo");
 var audio = document.getElementById("audio");
 var video = document.getElementById("video");
+var full = document.getElementById("full");
 
 
 // variables
@@ -33,6 +34,9 @@ audio.onclick = function(){
 };
 video.onclick = function(){
     toggleVideo();
+};
+full.onclick = function(){
+    goFull();
 };
 
 function initiateCall() {
@@ -159,4 +163,8 @@ function toggleAudio() {
 function toggleVideo() {
     console.log("in toggle video");
     localStream.getVideoTracks()[0].enabled = !localStream.getVideoTracks()[0].enabled
+}
+
+function goFull() {
+    remoteVideo.mozRequestFullScreen();
 }
