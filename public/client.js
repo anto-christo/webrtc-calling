@@ -1,6 +1,8 @@
 // getting dom elements
 var localVideo = document.getElementById("localVideo");
 var remoteVideo = document.getElementById("remoteVideo");
+var audio = document.getElementById("audio");
+var video = document.getElementById("video");
 
 
 // variables
@@ -25,6 +27,14 @@ var isCaller;
 var socket = io();
 
 initiateCall();
+
+audio.onclick = function(){
+    toggleAudio();
+};
+video.onclick = function(){
+    toggleVideo();
+};
+
 function initiateCall() {
     streamConstraints = {
         video: true,
@@ -104,9 +114,9 @@ function onAddStream(event) {
     remoteVideo.src = URL.createObjectURL(event.stream);
     remoteStream = event.stream;
     if (remoteStream.getAudioTracks().length > 0) {
-        addAudioEvent('Remote user is sending Audio');
+        //addAudioEvent('Remote user is sending Audio');
     } else {
-        addAudioEvent('Remote user is not sending Audio');
+        //addAudioEvent('Remote user is not sending Audio');
     }
 }
 
@@ -142,5 +152,11 @@ function createPeerConnection() {
 }
 
 function toggleAudio() {
+    console.log("in toggle audio");
     localStream.getAudioTracks()[0].enabled = !localStream.getAudioTracks()[0].enabled
+}
+
+function toggleVideo() {
+    console.log("in toggle video");
+    localStream.getVideoTracks()[0].enabled = !localStream.getVideoTracks()[0].enabled
 }
