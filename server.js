@@ -1,14 +1,10 @@
-//requires
 const express = require('express');
 const app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-// express routing
 app.use(express.static('public'));
 
-
-// signaling
 io.on('connection', function (socket) {
     console.log('a user connected');
 
@@ -47,13 +43,12 @@ io.on('connection', function (socket) {
         socket.broadcast.to(event.room).emit('answer',event.sdp);
     });
 
-    socket.on('toggleAudio', function(event){
-        socket.broadcast.to(event.room).emit('toggleAudio', event.message);
-    });
+    // socket.on('toggleAudio', function(event){
+    //     socket.broadcast.to(event.room).emit('toggleAudio', event.message);
+    // });
 
 });
 
-// listener
 http.listen(3000, function () {
     console.log('listening on *:3000');
 });

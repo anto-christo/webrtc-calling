@@ -18,6 +18,7 @@ var iceServers = {
         }
     ]
 }
+
 var streamConstraints;
 var isCaller;
 
