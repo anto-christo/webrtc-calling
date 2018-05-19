@@ -112,9 +112,6 @@ function onIceCandidate(event) {
 function onAddStream(event) {
     remoteVideo.src = URL.createObjectURL(event.stream);
     remoteStream = event.stream;
-    if (remoteStream.getAudioTracks().length > 0) {
-    } else {
-    }
 }
 
 function setLocalAndOffer(sessionDescription) {
