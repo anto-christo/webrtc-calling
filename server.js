@@ -14,7 +14,7 @@ io.on('connection', function (socket) {
         var myRoom = io.sockets.adapter.rooms[room] || { length: 0 };
         var numClients = myRoom.length;
 
-        console.log(room, ' has ', numClients, ' clients');
+        console.log(room, ' has ', numClients+1, ' clients');
 
         if (numClients == 0) {
             socket.join(room);
@@ -42,10 +42,6 @@ io.on('connection', function (socket) {
     socket.on('answer', function(event){
         socket.broadcast.to(event.room).emit('answer',event.sdp);
     });
-
-    // socket.on('toggleAudio', function(event){
-    //     socket.broadcast.to(event.room).emit('toggleAudio', event.message);
-    // });
 
 });
 

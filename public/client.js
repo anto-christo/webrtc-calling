@@ -5,7 +5,7 @@ var video = document.getElementById("video");
 var full = document.getElementById("full");
 
 
-var roomNumber = 'webrtc-audio-demo';
+var roomName = 'webrtc-room';
 var localStream;
 var remoteStream;
 var rtcPeerConnection;
@@ -41,7 +41,7 @@ function initiateCall() {
         video: true,
         audio: true
     }
-    socket.emit('create or join', roomNumber);
+    socket.emit('create or join', roomName);
 }
 
 socket.on('created', function (room) {
@@ -56,7 +56,7 @@ socket.on('created', function (room) {
 socket.on('joined', function (room) {
     navigator.mediaDevices.getUserMedia(streamConstraints).then(function (stream) {
         addLocalStream(stream);
-        socket.emit('ready', roomNumber);
+        socket.emit('ready', roomName);
     }).catch(function (err) {
         console.log('An error ocurred when accessing media devices');
     });
@@ -104,7 +104,7 @@ function onIceCandidate(event) {
             label: event.candidate.sdpMLineIndex,
             id: event.candidate.sdpMid,
             candidate: event.candidate.candidate,
-            room: roomNumber
+            room: roomName
         })
     }
 }
@@ -122,7 +122,7 @@ function setLocalAndOffer(sessionDescription) {
     socket.emit('offer', {
         type: 'offer',
         sdp: sessionDescription,
-        room: roomNumber
+        room: roomName
     });
 }
 
@@ -131,7 +131,7 @@ function setLocalAndAnswer(sessionDescription) {
     socket.emit('answer', {
         type: 'answer',
         sdp: sessionDescription,
-        room: roomNumber
+        room: roomName
     });
 }
 
