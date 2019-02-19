@@ -49,7 +49,7 @@ socket.on('created', function (room) {
         addLocalStream(stream);
         isCaller = true;
     }).catch(function (err) {
-        console.log('An error ocurred when accessing media devices');
+        console.log('An error ocurred when accessing media devices', err);
     });
 });
 
@@ -58,7 +58,7 @@ socket.on('joined', function (room) {
         addLocalStream(stream);
         socket.emit('ready', roomName);
     }).catch(function (err) {
-        console.log('An error ocurred when accessing media devices');
+        console.log('An error ocurred when accessing media devices', err);
     });
 });
 
@@ -98,7 +98,6 @@ socket.on('answer', function (event) {
 
 function onIceCandidate(event) {
     if (event.candidate) {
-        console.log('sending ice candidate');
         socket.emit('candidate', {
             type: 'candidate',
             label: event.candidate.sdpMLineIndex,
@@ -110,7 +109,7 @@ function onIceCandidate(event) {
 }
 
 function onAddStream(event) {
-    remoteVideo.src = URL.createObjectURL(event.stream);
+    remoteVideo.srcObject = event.stream;
     remoteStream = event.stream;
 }
 
@@ -134,7 +133,7 @@ function setLocalAndAnswer(sessionDescription) {
 
 function addLocalStream(stream) {
     localStream = stream;
-    localVideo.src = URL.createObjectURL(stream);
+    localVideo.srcObject = stream;
 }
 
 function createPeerConnection() {
@@ -145,12 +144,10 @@ function createPeerConnection() {
 }
 
 function toggleAudio() {
-    console.log("in toggle audio");
     localStream.getAudioTracks()[0].enabled = !localStream.getAudioTracks()[0].enabled
 }
 
 function toggleVideo() {
-    console.log("in toggle video");
     localStream.getVideoTracks()[0].enabled = !localStream.getVideoTracks()[0].enabled
 }
 
