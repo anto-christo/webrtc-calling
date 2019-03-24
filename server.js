@@ -11,20 +11,20 @@ io.on('connection', function (socket) {
         callback(socket.id);
     });
 
-    socket.on('ready', function (room) {
-        socket.broadcast.to(room).emit('ready');
+    socket.on('join', function (code) {
+        io.to(code).emit('ready', socket.id);
     });
 
     socket.on('candidate', function (event) {
-        socket.broadcast.to(event.room).emit('candidate', event);
+        io.to(event.sendTo).emit('candidate', event);
     });
 
     socket.on('offer', function (event) {
-        socket.broadcast.to(event.room).emit('offer', event.sdp);
+        io.to(event.receiver).emit('offer', event.sdp);
     });
 
     socket.on('answer', function (event) {
-        socket.broadcast.to(event.room).emit('answer', event.sdp);
+        io.to(event.caller).emit('answer', event.sdp);
     });
 
 });

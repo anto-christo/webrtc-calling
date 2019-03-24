@@ -11,21 +11,97 @@
 </head>
 
 <body>
-  <div class="row mr-0" style="margin-top: 15rem">
-    <div class="col-sm-2"></div>
-    <div class="col-sm-8">
-      <center>
-        <div class="card text-center" style="width: 25rem;">
-          <div class="card-body">
-            <h5 class="card-title mb-5">Welcome to WebRTC Demo</h5>
-            <a href="create.html" class="btn btn-primary" style="width: 10rem">Create</a>
-            <a href="join.html" class="btn btn-primary" style="width: 10rem">Join</a>
+
+  <!-- Home Section -->
+  <div id="home">
+    <div class="row mr-0" style="margin-top: 15rem">
+      <div class="col-sm-2"></div>
+      <div class="col-sm-8">
+        <center>
+          <div class="card text-center" style="width: 25rem;">
+            <div class="card-body">
+              <h5 class="card-title mb-5">Welcome to WebRTC Demo</h5>
+              <button id="createBtn" class="btn btn-primary" style="width: 10rem">Create</button>
+              <button id="joinBtn" class="btn btn-primary" style="width: 10rem">Join</button>
+            </div>
           </div>
-        </div>
-      </center>
+        </center>
+      </div>
+      <div class="col-sm-2"></div>
     </div>
-    <div class="col-sm-2"></div>
   </div>
+
+  <!-- Create Section -->
+  <div id="create">
+    <div class="row mr-0" style="margin-top: 15rem">
+      <div class="col-sm-2"></div>
+      <div class="col-sm-8">
+        <center>
+          <div class="card text-center" style="width: 25rem;">
+            <div class="card-body">
+              <h5 class="card-title">Start a Call</h5>
+              <p class="card-text">Share the below secret code !!</p>
+              <input type="text" class="form-control mb-5" id="secret_code" style="text-align: center" disabled>
+              <button id="startCallBtn" class="btn btn-primary" style="width: 10rem">Start Call</button>
+            </div>
+          </div>
+        </center>
+      </div>
+      <div class="col-sm-2"></div>
+    </div>
+  </div>
+
+  <!-- Join Section -->
+  <div id="join">
+    <div class="row mr-0" style="margin-top: 15rem">
+      <div class="col-sm-2"></div>
+      <div class="col-sm-8">
+        <center>
+          <div class="card text-center" style="width: 25rem;">
+            <div class="card-body">
+              <h5 class="card-title">Join a Call</h5>
+              <p class="card-text">Enter the secret code below !!</p>
+              <input type="text" class="form-control mb-5" id="secret_code" style="text-align: center">
+              <button id="joinCallBtn" class="btn btn-primary" style="width: 10rem">Join Call</button>
+            </div>
+          </div>
+        </center>
+      </div>
+      <div class="col-sm-2"></div>
+    </div>
+  </div>
+
+  <!-- Call Section -->
+  <div id="header"><span style="float:left;margin-right:1%"><img src="img/call.png" height="50px"
+        width="50px"></span><b>WebRTC Call</b></div>
+  <div id="local">
+    <video id="localVideo" autoplay muted></video>
+  </div>
+  <div id="panel" style="float:right;background-color:black;margin-top:10%;width:120px;height:230px;padding:1%">
+    <center>
+      <h3 style="color:white">Control Panel</h3>
+    </center>
+    <hr>
+    <label class="label">Audio</label>
+    <label class="switch">
+      <input id="audio" type="checkbox" checked>
+      <span class="slider round"></span>
+    </label><br><br>
+
+    <label class="label">Video</label>
+    <label class="switch">
+      <input id="video" type="checkbox" checked>
+      <span class="slider round"></span>
+    </label><br><br>
+    <center>
+      <img id="full" src="img/full.png" height="50px" width="50px">
+    </center>
+  </div>
+  <center>
+    <div id="remote">
+      <video id="remoteVideo" autoplay></video>
+    </div>
+  </center>
 
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"
     integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -35,6 +111,8 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="index.js"></script>
 </body>
 
 </html>
