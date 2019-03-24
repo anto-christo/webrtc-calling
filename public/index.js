@@ -10,11 +10,11 @@ let remoteStream;
 let rtcPeerConnection;
 let iceServers = {
     'iceServers': [{
-            'url': 'stun:stun.services.mozilla.com'
-        },
-        {
-            'url': 'stun:stun.l.google.com:19302'
-        }
+        'url': 'stun:stun.services.mozilla.com'
+    },
+    {
+        'url': 'stun:stun.l.google.com:19302'
+    }
     ]
 }
 
@@ -31,11 +31,22 @@ let receiver = null;
 $(document).ready(function () {
     showHome();
 
-    $('#createBtn').click(function() {
-        showCreate();
+    $('#createBtn').click(function () {
+        socket.emit('create', function (res) {
+            console.log('send create');
+            $('#caller_code').val(res);
+            caller = res;
+            showCreate();
+            navigator.mediaDevices.getUserMedia(streamConstraints).then(function (stream) {
+                addLocalStream(stream);
+                isCaller = true;
+            }).catch(function (err) {
+                console.log('An error ocurred when accessing media devices', err);
+            });
+        });
     });
 
-    $('#joinBtn').click(function() {
+    $('#joinBtn').click(function () {
         showJoin();
     });
 
@@ -43,23 +54,12 @@ $(document).ready(function () {
     //---------------------------------------------------------------------------------------
     //---------------------------------------------------------------------------------------
 
-    socket.emit('create', function (res) {
-        $('#secret_code').val(res);
-        caller = res;
+    $('#startCallBtn').click(function () {
+        showCallScreen();
     });
 
-    $('#startCallBtn').click(function() {
-        // showCallScreen();
-        navigator.mediaDevices.getUserMedia(streamConstraints).then(function (stream) {
-            addLocalStream(stream);
-            isCaller = true;
-        }).catch(function (err) {
-            console.log('An error ocurred when accessing media devices', err);
-        });
-    });
-
-    socket.on('ready', function(code) {
-        console.log('receiver ready');
+    socket.on('ready', function (code) {
+        console.log('receiver ready at', code);
         receiver = code;
         createPeerConnection();
         let offerOptions = {
@@ -74,8 +74,9 @@ $(document).ready(function () {
     //---------------------------------------------------------------------------------------
     //---------------------------------------------------------------------------------------
 
-    $('#joinCallBtn').click(function() {
-        const code = $('#secret_code').val();
+    $('#joinCallBtn').click(function () {
+        showCallScreen();
+        const code = $('#join_code').val();
         navigator.mediaDevices.getUserMedia(streamConstraints).then(function (stream) {
             addLocalStream(stream);
             socket.emit('join', code);
@@ -89,56 +90,29 @@ function showHome() {
     $('#home').show();
     $('#create').hide();
     $('#join').hide();
+    $('#call').hide();
 }
 
 function showCreate() {
     $('#home').hide();
     $('#create').show();
     $('#join').hide();
+    $('#call').hide();
 }
 
 function showJoin() {
     $('#home').hide();
     $('#create').hide();
     $('#join').show();
+    $('#call').hide();
 }
 
-// var socket = io();
-
-// initiateCall();
-
-// audio.onclick = function(){
-//     toggleAudio();
-// };
-// video.onclick = function(){
-//     toggleVideo();
-// // };
-
-// function initiateCall() {
-//     streamConstraints = {
-//         video: true,
-//         audio: true
-//     }
-//     socket.emit('create or join', roomName);
-// }
-
-// socket.on('created', function (room) {
-//     navigator.mediaDevices.getUserMedia(streamConstraints).then(function (stream) {
-//         addLocalStream(stream);
-//         isCaller = true;
-//     }).catch(function (err) {
-//         console.log('An error ocurred when accessing media devices', err);
-//     });
-// });
-
-// socket.on('joined', function (room) {
-//     navigator.mediaDevices.getUserMedia(streamConstraints).then(function (stream) {
-//         addLocalStream(stream);
-//         socket.emit('ready', roomName);
-//     }).catch(function (err) {
-//         console.log('An error ocurred when accessing media devices', err);
-//     });
-// });
+function showCallScreen() {
+    $('#home').hide();
+    $('#create').hide();
+    $('#join').hide();
+    $('#call').show();
+}
 
 socket.on('candidate', function (event) {
     var candidate = new RTCIceCandidate({
@@ -148,32 +122,22 @@ socket.on('candidate', function (event) {
     rtcPeerConnection.addIceCandidate(candidate);
 });
 
-// socket.on('ready', function () {
-//     if (isCaller) {
-//         createPeerConnection();
-//         let offerOptions = {
-//             offerToReceiveAudio: 1
-//         }
-//         rtcPeerConnection.createOffer(offerOptions)
-//             .then(desc => setLocalAndOffer(desc))
-//             .catch(e => console.log(e));
-//     }
-// });
-
-socket.on('offer', function (event) {
+socket.on('offer', function (param) {
+    caller = param.caller;
     createPeerConnection();
-    rtcPeerConnection.setRemoteDescription(new RTCSessionDescription(event));
+    rtcPeerConnection.setRemoteDescription(new RTCSessionDescription(param.event));
     rtcPeerConnection.createAnswer()
         .then(desc => setLocalAndAnswer(desc))
         .catch(e => console.log(e));
 });
 
 socket.on('answer', function (event) {
+    console.log(event);
     rtcPeerConnection.setRemoteDescription(new RTCSessionDescription(event));
 })
 
 function onIceCandidate(event) {
-    let id = isCaller ? receiver: caller;
+    let id = isCaller ? receiver : caller;
     if (event.candidate) {
         socket.emit('candidate', {
             type: 'candidate',
@@ -192,6 +156,7 @@ function onAddStream(event) {
 
 function setLocalAndOffer(sessionDescription) {
     rtcPeerConnection.setLocalDescription(sessionDescription);
+    console.log('sending offer to', receiver);
     socket.emit('offer', {
         type: 'offer',
         sdp: sessionDescription,
@@ -201,6 +166,7 @@ function setLocalAndOffer(sessionDescription) {
 
 function setLocalAndAnswer(sessionDescription) {
     rtcPeerConnection.setLocalDescription(sessionDescription);
+    console.log('sending answer to ', caller);
     socket.emit('answer', {
         type: 'answer',
         sdp: sessionDescription,
