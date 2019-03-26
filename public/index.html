@@ -63,36 +63,20 @@
 
   <!-- Call Section -->
   <div id="call" style="display: none">
-    <div id="header"><span style="float:left;margin-right:1%"><img src="img/call.png" height="50px"
-          width="50px"></span><b>WebRTC Call</b></div>
-    <div id="local">
-      <video id="localVideo" autoplay muted></video>
-    </div>
-    <div id="panel" style="float:right;background-color:black;margin-top:10%;width:120px;height:230px;padding:1%">
-      <center>
-        <h3 style="color:white">Control Panel</h3>
-      </center>
-      <hr>
-      <label class="label">Audio</label>
-      <label class="switch">
-        <input id="audio" type="checkbox" checked>
-        <span class="slider round"></span>
-      </label><br><br>
-
-      <label class="label">Video</label>
-      <label class="switch">
-        <input id="video" type="checkbox" checked>
-        <span class="slider round"></span>
-      </label><br><br>
-      <center>
-        <img id="full" src="img/full.png" height="50px" width="50px">
-      </center>
-    </div>
-    <center>
-      <div id="remote">
-        <video id="remoteVideo" autoplay></video>
+    <div uk-grid>
+      <div class="uk-width-1-4"></div>
+      <div class="uk-width-1-2">
+        <div class="outer-container">
+          <div class="inner-container">
+            <div class="video-overlay">
+              <video id="localVideo" autoplay></video>
+            </div>
+            <video id="remoteVideo" autoplay></video>
+          </div>
+        </div>
       </div>
-    </center>
+      <div class="uk-width-1-4"></div>
+    </div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.3/js/uikit.min.js"></script>

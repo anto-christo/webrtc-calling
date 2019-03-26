@@ -19,7 +19,16 @@ let iceServers = {
 }
 
 const streamConstraints = {
-    video: true,
+    video: {
+        width: {
+            min: '640',
+            max: '640'
+        },
+        height: {
+            min: '480',
+            max: '480'
+        }
+    },
     audio: true
 };
 
